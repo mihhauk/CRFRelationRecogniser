@@ -3,64 +3,64 @@ import corpus2
 import sys
 import os
 from multiprocessing import Process, Queue
-import time
 
 NUM_THREADS = 6
 MAX_CONTEXT_LEN = 5
 tagset = corpus2.get_named_tagset('nkjp')
 pairs = set()
+output_dir = ''
+
+class Consumer(Process):
+    
+    def __init__(self, task_queue):
+        Process.__init__(self)
+        self.task_queue = task_queue
+
+    def run(self):
+        while True:
+            path = self.task_queue.get()
+            if path is None:
+                # Poison pill means we should exit
+                break
+
+            tok_reader = corpus2.TokenReader.create_path_reader('xces', tagset, path)
+            writer = corpus2.TokenWriter.create_path_writer('ccl', os.path.join(output_dir,os.path.basename(path).replace('.xml.ccl', '.xml')), tagset)
+            for sent in sentences(tok_reader):
+                asent = reset_annotations(sent)
+                context = check_sentence(asent, pairs)
+                if context:
+                    if not(context[1] - context[0] > MAX_CONTEXT_LEN or context[1] - context[0] == 1):
+                        asent = annotate_context(asent, *context)
+                        writer.write_sentence(corpus2.AnnotatedSentence.cast_as_sentence(asent))
+                else:
+                    writer.write_sentence(corpus2.AnnotatedSentence.cast_as_sentence(asent))
+            del tok_reader
+            del writer
+
 
 
 def main(args):
+    global output_dir
+    output_dir = args[2]
+
     with open(args[0], 'r') as hyponym_pairs:
         for pair in hyponym_pairs.readlines():
             hyponym, hypernym = pair.strip().split(';')[::2]
             if hyponym != hypernym:
                 pairs.add((hyponym, hypernym))
 
-    files = list_files(args[1], '.xml.ccl')
+    
 
-    processed_sentences = [[] for i in xrange(NUM_THREADS if NUM_THREADS < len(files) else len(files))]
+    files_to_process = Queue()   
+    processes = [Consumer(files_to_process) for i in xrange(NUM_THREADS)]
+    for p in processes:
+        p.start()
 
-    # with open(os.path.join(args[2],'batch.txt'), 'w') as batch:
-    #     batch.write(('\n').join(files))
-
-    # positive_sentences, negative_sentences = [], []
-
-    processes = [Process(target=process_file, args=(files.pop(), processed_sentences[i])) for i in xrange(NUM_THREADS if NUM_THREADS < len(files) else len(files))]
-
-    for proc in processes:
-        proc.start()
-
-    while files:
-        for idx, proc in enumerate(processes):
-            if not proc.is_alive():
-                processes[idx] = Process(target=process_file, args=(files.pop(), processed_sentences[idx]))
-                processes[idx].start()
-
-    while any(t.is_alive() for t in processes):
-        time.sleep(2)
-
-    writer = corpus2.TokenWriter.create_path_writer('ccl', os.path.join(args[2],'annotated_context.xml'), tagset)
-    for sent in [item for sublist in processed_sentences for item in sublist]:
-        writer.write_sentence(sent)
-    del writer
-        
+    files_to_process = queue_files(args[1], '.xml.ccl', files_to_process)
+    for i in xrange(NUM_THREADS):
+        files_to_process.put(None)
 
 
-def process_file(path, processed_sentences):
-    # print 'processing', path 
-    tok_reader = corpus2.TokenReader.create_path_reader('xces', tagset, path)
-    for sent in sentences(tok_reader):
-        asent = reset_annotations(sent)
-        context = check_sentence(asent, pairs)
-        if context:
-            if not(context[1] - context[0] > MAX_CONTEXT_LEN or context[1] - context[0] == 1):
-                asent = annotate_context(asent, *context)
-                processed_sentences.append(corpus2.AnnotatedSentence.cast_as_sentence(asent))
-        else:
-            processed_sentences.append(corpus2.AnnotatedSentence.cast_as_sentence(asent))
-    del tok_reader
 
 def reset_annotations(sent):
     asent = corpus2.AnnotatedSentence.wrap_sentence(sent)
@@ -101,7 +101,6 @@ def check_sentence(sent, pairs):
                     cur_end = idx
         if cur_start and cur_end:
             if context:
-                print 'another context'
                 if context[1] - context[0] < cur_end - cur_start:
                     context = (cur_start, cur_end)
             else:
@@ -118,14 +117,14 @@ def sentences(rdr):
 
 
 
-def list_files(path, extension, queue=Queue):
+def queue_files(path, extension, queue=Queue()):
     if os.path.isdir(path):
         path = path[:-1] if path[-1] == '/' else path
         docs = [f for f in os.listdir(path) if f.endswith(extension)]
         for filename in docs:
             queue.put('{0}/{1}'.format(path, filename))
         for subdir in os.walk(path).next()[1]:
-            list_files(os.path.join(path, subdir), extension, queue)
+            queue_files(os.path.join(path, subdir), extension, queue)
     else:
         raise Exception(path+' is not a valid directory')
     return queue
