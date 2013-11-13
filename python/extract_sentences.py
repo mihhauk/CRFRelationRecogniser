@@ -3,9 +3,10 @@ import corpus2
 import sys
 import os
 from multiprocessing import Process, Queue
+import itertools
 
 NUM_THREADS = 6
-MAX_CONTEXT_LEN = 5
+MAX_CONTEXT_LEN = 10
 tagset = corpus2.get_named_tagset('nkjp')
 pairs = set()
 output_dir = ''
@@ -27,12 +28,10 @@ class Consumer(Process):
             writer = corpus2.TokenWriter.create_path_writer('ccl', os.path.join(output_dir,os.path.basename(path).replace('.xml.ccl', '.xml')), tagset)
             for sent in sentences(tok_reader):
                 asent = reset_annotations(sent)
-                context = check_sentence(asent, pairs)
-                if context:
-                    if not(context[1] - context[0] > MAX_CONTEXT_LEN or context[1] - context[0] == 1):
-                        asent = annotate_context(asent, *context)
-                        writer.write_sentence(corpus2.AnnotatedSentence.cast_as_sentence(asent))
-                else:
+                contexts = check_sentence(asent, pairs)
+                if contexts is not None:
+                    # print contexts
+                    asent = annotate_context(asent, contexts)
                     writer.write_sentence(corpus2.AnnotatedSentence.cast_as_sentence(asent))
             del tok_reader
             del writer
@@ -70,43 +69,88 @@ def reset_annotations(sent):
     return asent
 
 
-def annotate_context(asent, start, end):
+def annotate_context(asent, contexts):
     chan = asent.get_channel('relationcontext')
-    for idx in xrange(start + 1, end):
-        chan.set_segment_at(idx, 1)
+    for nr, (start, end) in enumerate(contexts, start=1):
+        for idx in xrange(start, end + 1):
+            chan.set_segment_at(idx, nr)
     return asent
 
-def check_sentence(sent, pairs):
+def check_sentence_old(sent, pairs):
     """
     Checks sentence for pair of tokens in relation 
     """
-    context = None
+    contexts = []
     lexemes = []
     for token in sent.tokens():
-        lexemes.append(token.get_preferred_lexeme(tagset).lemma_utf8())
+        lexemes.append(token.get_preferred_lexeme(tagset).lemma_utf8())  
+
+    # print '>>>>>>>'   
     for hyponym, hypernym in pairs:
         cur_start, cur_end = None, None
         for idx, lexeme in enumerate(lexemes):
             if hyponym == lexeme:
                 if hypernym:
-                    cur_start = idx
+                    cur_start = idx + 1
                     hyponym = None
                 else:
-                    cur_end = idx
+                    cur_end = idx - 1
             elif hypernym == lexeme:
                 if hyponym:
-                    cur_start = idx
+                    cur_start = idx + 1
                     hypernym = None
                 else:
-                    cur_end = idx
-        if cur_start and cur_end:
-            if context:
-                if context[1] - context[0] < cur_end - cur_start:
-                    context = (cur_start, cur_end)
-            else:
-                context = (cur_start, cur_end)
-    return context    
+                    cur_end = idx - 1
+            if valid_context(cur_start, cur_end):
+                # print 'valid', cur_start, cur_end
+                # print 'context', contexts
+                if not overlaps(cur_start, cur_end, contexts):
+                    # print 'not overlaps'
+                    contexts.append((cur_start, cur_end))
+                else:
+                    # print 'overlaps', contexts
+                    return None
+            # elif cur_start is not None and cur_end is not None:
+                # print 'invalid', cur_start, cu
+    return contexts  
 
+def check_sentence(sent, pairs):
+    """
+    Checks sentence for pair of tokens in relation 
+    """
+    contexts = []
+    lexemes = []
+    i = 0
+    for token in sent.tokens():
+        lexemes.append((token.get_preferred_lexeme(tagset).lemma_utf8(), i))
+        i += 1
+
+    for ((word1, id1), (word2, id2)) in itertools.combinations(lexemes, 2):
+        if (word1, word2) in pairs or (word2, word1) in pairs:
+            if (1 < abs(id1 - id2) < MAX_CONTEXT_LEN):
+                if id1 < id2:
+                    cur_start = id1
+                    cur_end = id2
+                else:
+                    cur_start = id2
+                    cur_end = id1   
+                if not overlaps(cur_start, cur_end, contexts):
+                    contexts.append((cur_start + 1, cur_end - 1))
+                else:
+                    return None              
+    return contexts  
+
+
+
+def overlaps(start, end, contexts):
+    cur_context = range(start, end+1)
+    for context in contexts:
+        if any(idx in cur_context for idx in context):
+            return True
+    return False
+
+def valid_context(start, end):
+    return start and end and start != end and end - start <= MAX_CONTEXT_LEN
 
 def sentences(rdr):
     while True:
