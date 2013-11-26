@@ -4,6 +4,7 @@ import sys
 import os
 from multiprocessing import Process, Queue
 import itertools
+import codecs
 
 NUM_THREADS = 6
 MAX_CONTEXT_LEN = 10
@@ -11,8 +12,8 @@ tagset = corpus2.get_named_tagset('nkjp')
 pairs = set()
 output_dir = ''
 
+
 class Consumer(Process):
-    
     def __init__(self, task_queue):
         Process.__init__(self)
         self.task_queue = task_queue
@@ -25,7 +26,9 @@ class Consumer(Process):
                 break
 
             tok_reader = corpus2.TokenReader.create_path_reader('xces', tagset, path)
-            writer = corpus2.TokenWriter.create_path_writer('ccl', os.path.join(output_dir,os.path.basename(path).replace('.xml.ccl', '.xml')), tagset)
+            writer = corpus2.TokenWriter.create_path_writer('ccl',
+                                                            os.path.join(output_dir, os.path.basename(path).replace('.xml.ccl', '.xml')),
+                                                            tagset)
             for sent in sentences(tok_reader):
                 asent = reset_annotations(sent)
                 contexts = check_sentence(asent, pairs)
@@ -37,20 +40,20 @@ class Consumer(Process):
             del writer
 
 
-
 def main(args):
     global output_dir
     output_dir = args[2]
 
-    with open(args[0], 'r') as hyponym_pairs:
+    with codecs.open(args[0], 'r', 'utf-8') as hyponym_pairs:
         for pair in hyponym_pairs.readlines():
             hyponym, hypernym = pair.strip().split(';')[::2]
             if hyponym != hypernym:
                 pairs.add((hyponym, hypernym))
+    print (u'ma', u'ście') in pairs
+    print (u'ście', u'ma') in pairs
+    return 0
 
-    
-
-    files_to_process = Queue()   
+    files_to_process = Queue()
     processes = [Consumer(files_to_process) for i in xrange(NUM_THREADS)]
     for p in processes:
         p.start()
@@ -58,7 +61,6 @@ def main(args):
     files_to_process = queue_files(args[1], '.xml.ccl', files_to_process)
     for i in xrange(NUM_THREADS):
         files_to_process.put(None)
-
 
 
 def reset_annotations(sent):
@@ -76,16 +78,16 @@ def annotate_context(asent, contexts):
             chan.set_segment_at(idx, nr)
     return asent
 
+
 def check_sentence_old(sent, pairs):
     """
-    Checks sentence for pair of tokens in relation 
+    Checks sentence for pair of tokens in relation
     """
     contexts = []
     lexemes = []
     for token in sent.tokens():
-        lexemes.append(token.get_preferred_lexeme(tagset).lemma_utf8())  
+        lexemes.append(token.get_preferred_lexeme(tagset).lemma_utf8())
 
-    # print '>>>>>>>'   
     for hyponym, hypernym in pairs:
         cur_start, cur_end = None, None
         for idx, lexeme in enumerate(lexemes):
@@ -112,11 +114,12 @@ def check_sentence_old(sent, pairs):
                     return None
             # elif cur_start is not None and cur_end is not None:
                 # print 'invalid', cur_start, cu
-    return contexts  
+    return contexts
+
 
 def check_sentence(sent, pairs):
     """
-    Checks sentence for pair of tokens in relation 
+    Checks sentence for pair of tokens in relation
     """
     contexts = []
     lexemes = []
@@ -133,24 +136,25 @@ def check_sentence(sent, pairs):
                     cur_end = id2
                 else:
                     cur_start = id2
-                    cur_end = id1   
+                    cur_end = id1
                 if not overlaps(cur_start, cur_end, contexts):
                     contexts.append((cur_start + 1, cur_end - 1))
                 else:
-                    return None              
-    return contexts  
-
+                    return None
+    return contexts
 
 
 def overlaps(start, end, contexts):
-    cur_context = range(start, end+1)
+    cur_context = range(start, end + 1)
     for context in contexts:
         if any(idx in cur_context for idx in context):
             return True
     return False
 
+
 def valid_context(start, end):
     return start and end and start != end and end - start <= MAX_CONTEXT_LEN
+
 
 def sentences(rdr):
     while True:
@@ -158,7 +162,6 @@ def sentences(rdr):
         if not sentence:
             break
         yield sentence
-
 
 
 def queue_files(path, extension, queue=Queue()):
@@ -170,9 +173,8 @@ def queue_files(path, extension, queue=Queue()):
         for subdir in os.walk(path).next()[1]:
             queue_files(os.path.join(path, subdir), extension, queue)
     else:
-        raise Exception(path+' is not a valid directory')
+        raise Exception(path + ' is not a valid directory')
     return queue
-
 
 
 if __name__ == '__main__':
