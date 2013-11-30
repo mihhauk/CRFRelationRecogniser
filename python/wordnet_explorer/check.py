@@ -36,7 +36,6 @@ nx.draw(G)
 plt.show()
 '''
 
-
 def make_wordnet_list():
     conn = db.connect(
               host = "localhost",
@@ -46,6 +45,7 @@ def make_wordnet_list():
               db = "wordnet_29_08_2012",
               charset = "utf8",
               use_unicode = True)
+
     cursor = conn.cursor()    
     sql = 'SELECT u.lemma as hyponym, u.variant as v1, \
                   u2.lemma as hyperonym, u2.variant as v2 \
@@ -61,7 +61,10 @@ def make_wordnet_list():
            WHERE s.rel_id = 10 \
              AND u.lemma not like "%% %%" \
              AND u2.lemma not like "%% %%" \
+	     AND u.pos = 2\
+             AND u2.pos = 2\
            ORDER BY u2.lemma'
+
     cursor.execute(sql)
     wordnetList = cursor.fetchall()
     f = codecs.open('wordnet_list_2.txt','w','utf-8')
@@ -150,9 +153,9 @@ def make_estratto_extended_list():
     print "EP: %s" % len(ep)
     print "EP2: %s" % len(ep2)    
     
-#make_wordnet_list()    
+make_wordnet_list()    
 #make_estratto_list()
-make_estratto_extended_list()
+#make_estratto_extended_list()
 
 
 
