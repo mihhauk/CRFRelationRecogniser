@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
-"""
-    Jakub Gramsz
+"""Usage:
+    dist_tls.py test <file>
+    dist_tls.py distance <token1> <token2> [<max_distance>]
+
+Author: Jakub A. Gramsz
 """
 
 import MySQLdb as db
-from collections import defaultdict
 import codecs
+from docopt import docopt
 import re
 
 
@@ -49,15 +52,15 @@ def get_sql_hipos(synset_id):
 def distance(token1, token2, max_distance=100):
     """
         Funkcja oczekuje na dwa słowa w formie podstawowej i liczy ich odległość w relacji hipo-/hyperonimi
-        Jeżeli słowa nie są w relacji zwracja -1, wprzypadku gdy zabraknie następników.
+        Jeżeli słowa nie są w relacji zwracja -1, wprzypadku gdy zabraknie następników. (zmienię na ang.)
     """
     conn = get_connection()
     cursor = conn.cursor()
 
     synset_ids1 = get_synset_ids(conn, token1)
-    print( synset_ids1)
+    # print( synset_ids1)
     synset_ids2 = get_synset_ids(conn, token2)
-    print( synset_ids2)
+    # print( synset_ids2)
 
     dist = 0
     synsetidList_hyperos = synset_ids1
@@ -81,8 +84,31 @@ def distance(token1, token2, max_distance=100):
             synsetidList_hipos.extend([item[0] for item in cursor.fetchall()])
         dist += 1
 
-        print("Dist: {0}, Liczba następników: hyper {1}, hipo {2}".format(dist + 1,
-                                                                len(synsetidList_hyperos),
-                                                                len(synsetidList_hipos)))
+        #print("Dist: {0}, Liczba następników: hyper {1}, hipo {2}".format(dist + 1,
+        #                                                        len(synsetidList_hyperos),
+        #                                                        len(synsetidList_hipos)))
 
     return dist
+
+
+def test_dist(file_name):
+    f = codecs.open('wordnet_explorer/wordnet_list_2.txt','r','utf-8')
+    f2 = codecs.open(file_name, 'w', 'utf-8')
+    for line in f:
+        (hyponym, v1, hypernym, v2) = line[:-1].split(";")
+        f2.write("%s;%s;%s;%s;%s\n" % (hyponym, v1, hypernym, v2, distance(hyponym, hypernym, 1000)) )
+    f2.close()
+    f.close()
+
+
+arguments = docopt(__doc__)
+
+if arguments['test']:
+    test_dist(arguments['<file>'])
+if arguments['distance']:
+    if arguments['<max_distance>']:
+        print("Distance between tokens is %s" % (distance(arguments['<token1>'],
+                                                 arguments['<token2>'],
+                                                 arguments['<max_distance>'])) )
+    else:
+        print("Distance between tokens is %s" % distance(arguments['<token1>'], arguments['<token2>']))
