@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
+"""
+Script annotating relation contexts beetween given lexical units pairs.
+Usage:
+    extract_sentences.py <pairs> <src-dir> <out-dir>
+"""
 import corpus2
-import sys
 import os
 from multiprocessing import Process, Queue
 import itertools
 import codecs
+from docopt import docopt
 
 NUM_THREADS = 6
 MAX_CONTEXT_LEN = 10
@@ -33,32 +38,30 @@ class Consumer(Process):
                 asent = reset_annotations(sent)
                 contexts = check_sentence(asent, pairs)
                 if contexts is not None:
-                    # print contexts
-                    asent = annotate_context(asent, contexts)
+                    if contexts:
+                        asent = annotate_context(asent, contexts)
                     writer.write_sentence(corpus2.AnnotatedSentence.cast_as_sentence(asent))
             del tok_reader
             del writer
 
 
-def main(args):
+def main():
+    args = docopt(__doc__)
     global output_dir
-    output_dir = args[2]
+    output_dir = args['<out-dir>']
 
-    with codecs.open(args[0], 'r', 'utf-8') as hyponym_pairs:
+    with codecs.open(args['<pairs>'], 'r', 'utf-8') as hyponym_pairs:
         for pair in hyponym_pairs.readlines():
             hyponym, hypernym = pair.strip().split(';')[::2]
             if hyponym != hypernym:
                 pairs.add((hyponym, hypernym))
-    print (u'ma', u'ście') in pairs
-    print (u'ście', u'ma') in pairs
-    return 0
 
     files_to_process = Queue()
     processes = [Consumer(files_to_process) for i in xrange(NUM_THREADS)]
     for p in processes:
         p.start()
 
-    files_to_process = queue_files(args[1], '.xml.ccl', files_to_process)
+    files_to_process = queue_files(args['<src-dir>'], '.xml.ccl', files_to_process)
     for i in xrange(NUM_THREADS):
         files_to_process.put(None)
 
@@ -67,11 +70,11 @@ def reset_annotations(sent):
     asent = corpus2.AnnotatedSentence.wrap_sentence(sent)
     for chan in asent.all_channels():
         asent.remove_channel(chan)
-    asent.create_channel('relationcontext')
     return asent
 
 
 def annotate_context(asent, contexts):
+    asent.create_channel('relationcontext')
     chan = asent.get_channel('relationcontext')
     for nr, (start, end) in enumerate(contexts, start=1):
         for idx in xrange(start, end + 1):
@@ -178,4 +181,4 @@ def queue_files(path, extension, queue=Queue()):
 
 
 if __name__ == '__main__':
-    main(sys.argv[1:])
+    main()
