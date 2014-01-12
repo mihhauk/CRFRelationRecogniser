@@ -92,8 +92,8 @@ def distance(token1, token2, max_distance=100):
 
 
 def test_dist(file_name):
-    f = codecs.open('wordnet_explorer/wordnet_list_2.txt','r','utf-8')
-    f2 = codecs.open(file_name, 'w', 'utf-8')
+    f = codecs.open(file_name,'r','utf-8')
+    f2 = codecs.open(file_name+'-out', 'w', 'utf-8')
     for line in f:
         (hyponym, v1, hypernym, v2) = line[:-1].split(";")
         f2.write("%s;%s;%s;%s;%s\n" % (hyponym, v1, hypernym, v2, distance(hyponym, hypernym, 1000)) )
