@@ -4,8 +4,9 @@
 Author: Jakub A. Gramsz
 
 Usage:
-    hypgraph.py make <filename> [-l <limit>] [-s <start_from>]
+    hypgraph.py make-graph <filename> [-l <limit>] [-s <start_from>]
     hypgraph.py list -i <graph_filename> -d <num_distance> [-o <filename>]
+    hypgraph.py lists
 
 Options:
     -i <graph_filename>, --input <graph_filename>
@@ -70,6 +71,189 @@ sql = 'SELECT u.lemma as hyponym, u.variant as v1, \
          AND u2.pos = 2\
        ORDER BY u2.lemma'
 
+# --- zapytania ręczne ---
+
+sql2= 'SELECT DISTINCT u.lemma as hyponym, u.variant as v1, \
+              u2.lemma as hyperonym, u2.variant as v2 \
+       FROM synsetrelation s1 \
+       JOIN synsetrelation s2 \
+         ON s1.parent_id = s2.child_id \
+       JOIN unitandsynset su\
+         ON s2.parent_id = su.syn_id \
+       JOIN unitandsynset su2 \
+         ON s1.child_id = su2.syn_id \
+       JOIN lexicalunit u \
+         ON su.lex_id = u.id \
+       JOIN lexicalunit u2 \
+         ON su2.lex_id = u2.id \
+       WHERE s1.rel_id = 10 \
+         AND s2.rel_id = 10 \
+         AND u.lemma not like "%% %%" \
+         AND u2.lemma not like "%% %%" \
+     AND u.pos = 2 \
+         AND u2.pos = 2 \
+       ORDER BY u2.lemma'
+
+sql3 = 'SELECT DISTINCT u.lemma as hyponym, u.variant as v1, \
+              u2.lemma as hyperonym, u2.variant as v2 \
+       FROM synsetrelation s1 \
+       JOIN synsetrelation s2 \
+         ON s1.parent_id = s2.child_id \
+       JOIN synsetrelation s3 \
+         ON s2.parent_id = s3.child_id \
+       JOIN unitandsynset su \
+         ON s3.parent_id = su.syn_id \
+       JOIN unitandsynset su2 \
+         ON s1.child_id = su2.syn_id \
+       JOIN lexicalunit u \
+         ON su.lex_id = u.id \
+       JOIN lexicalunit u2 \
+         ON su2.lex_id = u2.id \
+       WHERE s1.rel_id = 10 \
+         AND s2.rel_id = 10 \
+         AND s3.rel_id = 10 \
+         AND u.lemma not like "%% %%"  \
+         AND u2.lemma not like "%% %%"  \
+     AND u.pos = 2 \
+         AND u2.pos = 2 \
+       ORDER BY u2.lemma'
+
+sql4 = 'SELECT DISTINCT u.lemma as hyponym, u.variant as v1, \
+              u2.lemma as hyperonym, u2.variant as v2 \
+       FROM synsetrelation s1 \
+       JOIN synsetrelation s2 \
+         ON s1.parent_id = s2.child_id \
+       JOIN synsetrelation s3 \
+         ON s2.parent_id = s3.child_id \
+       JOIN synsetrelation s4 \
+         ON s3.parent_id = s4.child_id \
+       JOIN unitandsynset su \
+         ON s4.parent_id = su.syn_id \
+       JOIN unitandsynset su2 \
+         ON s1.child_id = su2.syn_id \
+       JOIN lexicalunit u \
+         ON su.lex_id = u.id \
+       JOIN lexicalunit u2 \
+         ON su2.lex_id = u2.id \
+       WHERE s1.rel_id = 10 \
+         AND s2.rel_id = 10 \
+         AND s3.rel_id = 10 \
+         AND s4.rel_id = 10 \
+         AND u.lemma not like "%% %%"  \
+         AND u2.lemma not like "%% %%"  \
+     AND u.pos = 2 \
+         AND u2.pos = 2 \
+       ORDER BY u2.lemma'
+
+sql5 = 'SELECT DISTINCT u.lemma as hyponym, u.variant as v1, \
+              u2.lemma as hyperonym, u2.variant as v2 \
+       FROM synsetrelation s1 \
+       JOIN synsetrelation s2 \
+         ON s1.parent_id = s2.child_id \
+       JOIN synsetrelation s3 \
+         ON s2.parent_id = s3.child_id \
+       JOIN synsetrelation s4 \
+         ON s3.parent_id = s4.child_id \
+       JOIN synsetrelation s5 \
+         ON s4.parent_id = s5.child_id \
+       JOIN unitandsynset su \
+         ON s5.parent_id = su.syn_id \
+       JOIN unitandsynset su2 \
+         ON s1.child_id = su2.syn_id \
+       JOIN lexicalunit u \
+         ON su.lex_id = u.id \
+       JOIN lexicalunit u2 \
+         ON su2.lex_id = u2.id \
+       WHERE s1.rel_id = 10 \
+         AND s2.rel_id = 10 \
+         AND s3.rel_id = 10 \
+         AND s4.rel_id = 10 \
+         AND s5.rel_id = 10 \
+         AND u.lemma not like "%% %%"  \
+         AND u2.lemma not like "%% %%"  \
+     AND u.pos = 2 \
+         AND u2.pos = 2 \
+       ORDER BY u2.lemma'
+
+sql6 = 'SELECT DISTINCT u.lemma as hyponym, u.variant as v1, \
+              u2.lemma as hyperonym, u2.variant as v2 \
+       FROM synsetrelation s1 \
+       JOIN synsetrelation s2 \
+         ON s1.parent_id = s2.child_id \
+       JOIN synsetrelation s3 \
+         ON s2.parent_id = s3.child_id \
+       JOIN synsetrelation s4 \
+         ON s3.parent_id = s4.child_id \
+       JOIN synsetrelation s5 \
+         ON s4.parent_id = s5.child_id \
+       JOIN synsetrelation s6 \
+         ON s5.parent_id = s6.child_id \
+       JOIN unitandsynset su \
+         ON s5.parent_id = su.syn_id \
+       JOIN unitandsynset su2 \
+         ON s1.child_id = su2.syn_id \
+       JOIN lexicalunit u \
+         ON su.lex_id = u.id \
+       JOIN lexicalunit u2 \
+         ON su2.lex_id = u2.id \
+       WHERE s1.rel_id = 10 \
+         AND s2.rel_id = 10 \
+         AND s3.rel_id = 10 \
+         AND s4.rel_id = 10 \
+         AND s5.rel_id = 10 \
+         AND s6.rel_id = 10 \
+         AND u.lemma not like "%% %%"  \
+         AND u2.lemma not like "%% %%"  \
+     AND u.pos = 2 \
+         AND u2.pos = 2 \
+       ORDER BY u2.lemma'
+
+sql7 = 'SELECT DISTINCT u.lemma as hyponym, u.variant as v1, \
+              u2.lemma as hyperonym, u2.variant as v2 \
+       FROM synsetrelation s1 \
+       JOIN synsetrelation s2 \
+         ON s1.parent_id = s2.child_id \
+       JOIN synsetrelation s3 \
+         ON s2.parent_id = s3.child_id \
+       JOIN synsetrelation s4 \
+         ON s3.parent_id = s4.child_id \
+       JOIN synsetrelation s5 \
+         ON s4.parent_id = s5.child_id \
+       JOIN synsetrelation s6 \
+         ON s5.parent_id = s6.child_id \
+       JOIN synsetrelation s7 \
+         ON s6.parent_id = s7.child_id \
+       JOIN unitandsynset su \
+         ON s5.parent_id = su.syn_id \
+       JOIN unitandsynset su2 \
+         ON s1.child_id = su2.syn_id \
+       JOIN lexicalunit u \
+         ON su.lex_id = u.id \
+       JOIN lexicalunit u2 \
+         ON su2.lex_id = u2.id \
+       WHERE s1.rel_id = 10 \
+         AND s2.rel_id = 10 \
+         AND s3.rel_id = 10 \
+         AND s4.rel_id = 10 \
+         AND s5.rel_id = 10 \
+         AND s6.rel_id = 10 \
+         AND s7.rel_id = 10 \
+         AND u.lemma not like "%% %%"  \
+         AND u2.lemma not like "%% %%"  \
+     AND u.pos = 2 \
+         AND u2.pos = 2 \
+       ORDER BY u2.lemma'
+
+def make_wordnet_list(sql, file_name):
+    conn = get_connection()
+    cursor = conn.cursor()    
+    cursor.execute(sql)
+    wordnetList = cursor.fetchall()
+    f = codecs.open(file_name, 'w', 'utf-8')
+    for (hyponym, v1, hyperonym, v2) in wordnetList:
+        f.write("%s;%s;%s;%s\n" % (hyponym,v1,hyperonym,v2))
+    f.close()
+
 
 def get_vertices_such(graph, lex, var):
     matched_lex = find_vertex(graph, graph.vp["lex"], lex.encode('UTF-8', 'replace'))
@@ -104,7 +288,7 @@ def make_graph2(sql_source):
     tot = len(wordnetList)
     t = 0
     #print 'Do dodania do grafu %d krawędzi' % tot
-    g= Graph(directed=False)
+    g= Graph(directed=True)
     vprop_lex = g.new_vertex_property("string")
     vprop_var = g.new_vertex_property("int")
     vps = (vprop_lex, vprop_var)
@@ -123,20 +307,26 @@ def make_graph2(sql_source):
 
 def set_of_paths(steps, g):
     if steps < 1:
-        return set([])
+        return []
     elif steps == 1:
-        return set([(e.source(), e.target()) for e in g.edges()])
+        return [(e.source(), e.target()) for e in g.edges()]
     else:
         return join(set_of_paths(1, g), set_of_paths(steps-1,g))
 
 
-def join (set1, set2):
+def join (list1, list2):
     news = set()
-    for ed1 in set1:
-        for ed2 in set2:
+    c1 = 0
+    for ed1 in list1:
+        c1+=1
+        #c2 = 0
+        for ed2 in list2:
+            #c2+=1
             if ed1[1] == ed2[0]:
+		if c1 % 1000: 
+                    print c1, 'na', len(list1), 'nowych:', len(news)
                 news.add( (ed1[0], ed2[1]) )
-    return news
+    return list(news)
 
 
 def svp(g, vertex):
@@ -179,7 +369,7 @@ def print_list(graph_file_name, dist):
 def run():
     arguments = docopt(__doc__)
 
-    if arguments['make']:
+    if arguments['make-graph']:
         if bool(arguments['--limit']) and bool(arguments['--start-from']):
             start_from = int(arguments['--start-from'])
             limit = int(arguments['--limit'])
@@ -196,6 +386,13 @@ def run():
         else:
             print_list(arguments['--input'],
                        int(arguments['--distance']))
+    elif arguments['lists']:
+        #make_wordnet_list(sql2, 'list_d2_sql.csv')
+        #make_wordnet_list(sql3, 'list_d3_sql.csv')
+        #make_wordnet_list(sql4, 'list_d4_sql.csv')
+        #make_wordnet_list(sql5, 'list_d5_sql.csv')
+        #make_wordnet_list(sql6, 'list_d6_sql.csv')
+        make_wordnet_list(sql7, 'list_d7_sql.csv')
 
-
-run()
+if __name__ == '__main__':
+    run()

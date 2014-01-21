@@ -1,0 +1,54 @@
+\documentclass[a4paper,10pt]{report}
+\usepackage{graphicx}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+\usepackage[T1]{fontenc}
+\usepackage{indentfirst}
+\usepackage{amsmath}
+\usepackage{verbatim}
+\usepackage{booktabs}
+\usepackage{color}
+\usepackage[usenames,dvipsnames,svgnames]{xcolor}
+\usepackage{geometry}
+\geometry{verbose,lmargin=3cm,rmargin=3cm}
+\usepackage{utopia}
+\frenchspacing
+
+%opening
+\title{Rozpoznawanie relacji sematycznych w tekscie, porzez klasyfikację kontekstu relacji przy pomocy klasyfikatora CRF}
+\author{Jakub A. Gramsz \\ Michał Krautforst}
+\date{24 stycznia 2014}
+
+\begin{document}
+\renewcommand{\figurename}{Wykres}
+\renewcommand{\chaptername}{}
+
+\maketitle
+\tableofcontents
+
+\chapter{Wstęp}
+
+\section{Klasyfikator CRF}
+
+Klasyfikator CRF został zaporoponowany aby przetwaorzać sekwęcje w obu kierunkach \cite{lafferty2001crf}.
+
+\section{Rozpoznanie literatury}
+
+\chapter{Praca badawcza}
+
+\section{Wykonana praca}
+
+\section{Badania}
+
+\chapter{Wyniki i wnioski}
+
+\section{Wyniki}
+
+\section{Wnioski}
+
+\bibliographystyle{abbrv}
+\nocite{*}
+\bibliography{sem-rel-crf}
+
+\end{document}
