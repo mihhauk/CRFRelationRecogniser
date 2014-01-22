@@ -43,7 +43,7 @@ Wysoka jakość klasyfikacji otrzymana przy oznaczaniu nazw własnych w tekstach
 
 \subsection{Charakterystyka klasyfikatora}
 
-Klasyfikator CRF został zaporoponowany aby przetwaorzać sekwęcje w obu kierunkach \cite{lafferty2001crf}.
+Klasyfikator CRF został zaporoponowany aby przetwaorzać sekwencje w obu kierunkach \cite{lafferty2001crf}.
 
 \section{Rozpoznanie literatury}
 
@@ -101,22 +101,6 @@ Zmniejszenie liczby negatywnych przypadków pogarsza jakość klasyfikacji. Nale
 
 
 Klasyfikacja cechuje się wysoką precyzją, mimo zróżnicowanych przypadków pozytywnych oraz rzadkiej powtarzalności kontekstów
-
-Zdarza się, że wyodrębnione do klasyfikacji konteksty niejednoznacznie wskazują na występowanie relacji hiperonimi, przez co pomimo poprawnego działania klasyfikatora, generuje on niepoprawną parę hiponim-hiperonim
-
-Otrzymywane wyniki walidacji przypadki False Positive par hiponim-hiperoniom zazwyczaj są pojęciami w jakiś sposób powiązanymi w odczuciu użytkownika języka naturalnego, jednak do ich oceny niezbędna jest szeroka wiedza lingwistyczna
-
-\begin{center}
-\vspace{0.5cm}
-\framebox{\parbox{5cm}{
-Przykładowe FP:\par
-\hspace{0.2cm} muzyk - lider \par
-\hspace{0.2cm} opinia - historia \par
-\hspace{0.2cm} zdarzenie  - czas \par
-\hspace{0.2cm} dziedzictwo - konwencja
-}}
-\vspace{0.5cm}
-\end{center}
 
 Zaproponowana metoda odnajdowania relacji sematycznych w tekście poprzez oznaczanie ich kontekstów, nie przynosi zadowalających rezultatów, niemniej jednak może stanowić dobry wstęp na podstawie, którego innymi metodami można by proces ten kontynuować. Przykładowo oznaczone konteksty można by grupować na podstawie ich podobieństwa a następnie wyciągać z nich bardziej ogólne wzorce.
 
