@@ -89,9 +89,9 @@ Przedstawienie zadania odnajdywania relacji w tekście jako problem etykietowani
 Zbiór uczący stanowią zdania pochodzące z korpusów języka polskiego z oznaczonymi kontekstami par słów znajdujących się w relacji hiperonimi znajdujących się w różnych odległościach od siebie (1 do 3) w słowosieci. Każdy token opisany wektorem cech.
 
 \begin{itemize}
- \item walidację krzyżową dla 2, 3 i 10 foldów.
- \item dla długości kontekstów 5, 10, 15
- \item dla par hiponim-hiperonim o odległościach 1, 2, 3.
+ \item korpus wykorzystany w testach - Korpus Języka Polskiego Politechniki Wrocławskiej
+ \item długości kontekstów 5, 10, 15
+ \item pary hiponim-hiperonim o odległościach 1, 2, 3.
 \end{itemize}
 
 \chapter{Wyniki i wnioski}
@@ -106,19 +106,22 @@ Zbiór uczący stanowią zdania pochodzące z korpusów języka polskiego z ozna
 \end{figure} 
 
 \section{Wnioski}
+\begin{itemize}
+\item Badania prowadzone były na stosunkowo małym korpusie, warto przeprowadzić analogiczne testy dla większej ilości danych,
+napotkano jednak problem w postaci bardzo dużego zapotrzebowania na zasoby pamięci.  
 
-Skorzystanie z par hiponim-hiperonim o większej odległości powoduje spadek precyzji bez zmian kompletności
+\item Skorzystanie z par hiponim-hiperonim o większej odległości powoduje spadek precyzji bez zmian kompletności.
 
-Długość kontekstu wpływa na liczbę wygenerowanych przypadków pozytywnych (najlepszy wynik dla 10, dłuższe konteksty nie polepszają już wyników)
+\item Długość kontekstu wpływa na liczbę wygenerowanych przykładów pozytywnych, jednak wraz z jego wzrostem spada jakość klasyfikacji.
 
-Manipulacja cechami niezauważalnie wpływa na wyniki (cech powinno być możliwie dużo)
+\item Manipulacja cechami niezauważalnie wpływa na wyniki (cech powinno być możliwie dużo)
 
-Zmniejszenie liczby negatywnych przypadków pogarsza jakość klasyfikacji. Należałoby zrównoważyć proporcje liczby przypadków pozytywnych i negatywnych, jednak trudne jest określenie kryterium.
+\item Zmniejszenie liczby negatywnych przypadków pogarsza jakość klasyfikacji. Należałoby zrównoważyć proporcje liczby przypadków pozytywnych i negatywnych, jednak trudne jest określenie kryterium.
 
+\item Klasyfikacja cechuje się wysoką precyzją, mimo zróżnicowanych przypadków pozytywnych oraz rzadkiej powtarzalności kontekstów
 
-Klasyfikacja cechuje się wysoką precyzją, mimo zróżnicowanych przypadków pozytywnych oraz rzadkiej powtarzalności kontekstów
-
-Zaproponowana metoda odnajdowania relacji sematycznych w tekście poprzez oznaczanie ich kontekstów, nie przynosi zadowalających rezultatów, niemniej jednak może stanowić dobry wstęp na podstawie, którego innymi metodami można by proces ten kontynuować. Przykładowo oznaczone konteksty można by grupować na podstawie ich podobieństwa a następnie wyciągać z nich bardziej ogólne wzorce.
+\item Zaproponowana metoda odnajdowania relacji sematycznych w tekście poprzez oznaczanie ich kontekstów, nie przynosi zadowalających rezultatów, niemniej jednak może stanowić dobry wstęp na podstawie, którego innymi metodami można by proces ten kontynuować. Przykładowo oznaczone konteksty można by grupować na podstawie ich podobieństwa a następnie wyciągać z nich bardziej ogólne wzorce. 
+\end{itemize}
 
 %Bibliografia
 \bibliographystyle{abbrv}
