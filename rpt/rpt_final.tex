@@ -65,14 +65,14 @@ Przedstawienie zadania odnajdywania relacji w tekście jako problem etykietowani
 
 \noindent Poniżej przedstawiamy zadania.
 \begin{enumerate}
- \item Wydobycie par hiponim-hiperonim o zadanej odległości między sobą wprost z bazy Słowosieci. % skryp to wyciągania par hiponim-hiperonim dla zadanej odległości
- \item Budowa grafu relacji hiperonimi. % graf relacji hiperonimi (działa za wolno)
- \item Oznaczenie otrzymanych par w zadanym korpusie. % skrypt oznaczający wyciągnięte pary w zadanym korpusie
- \item Podział korpusu na zbiór uczący oraz testujący. % skrypt dzielacy oznaczony korpus na dane uczace i testujace
- \item Wydobycie oznaczonych kontekstów. % skrypt co wyciagania oznaczonych kontekstow
- \item Wypisywanie przykładów false positive skrypt wypisujący przykłady false positive.
- \item Dobór cech dla klasyfikatora \textbf{CRF}.  % badanie wpływu doboru cech
- \item Wyznaczenie odległości pomiędzy parami oznaczonymi poprzez klasyfikator (pośrednio oznaczonymi poprzez kontekst).  % skyrp do sprawdzania odległości wyodrębionych par
+ \item Wydobycie par hiponim-hiperonim o zadanej odległości między sobą wprost z bazy Słowosieci. % 
+ \item Budowa grafu relacji hiperonimi. % 
+ \item Oznaczenie otrzymanych par w zadanym korpusie. % 
+ \item Podział korpusu na zbiór uczący oraz testujący. % 
+ \item Wydobycie oznaczonych kontekstów. % 
+ \item Wypisywanie przykładów false positive % skrypt wypisujący przykłady false positive.
+ \item Dobór cech dla klasyfikatora \textbf{CRF}.  % 
+ \item Wyznaczenie odległości pomiędzy parami oznaczonymi poprzez klasyfikator (pośrednio oznaczonymi poprzez kontekst).  % 
 \end{enumerate}
 
 \section{Badania}
@@ -218,6 +218,29 @@ napotkano jednak problem w postaci bardzo dużego zapotrzebowania na zasoby pami
 \item Zaproponowana metoda odnajdowania relacji semantycznych w tekście poprzez oznaczanie ich kontekstów, nie przynosi zadowalających rezultatów, niemniej jednak może stanowić dobry wstęp na podstawie, którego innymi metodami można by proces ten kontynuować. Przykładowo oznaczone konteksty można by grupować na podstawie ich podobieństwa a następnie wyciągać z nich bardziej ogólne wzorce.
 
 \end{itemize}
+
+
+\pagebreak
+\centering---
+\vfill{}
+Wykaz zadań wraz z przynależnością do członków grupy:
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Michał Krautforst & --- skrypt to wyciągania par hiponim-hiperonim dla zadanej odległości \\
+                  & --- skrypt oznaczający wyciągnięte pary w zadanym korpusie \\
+                  & --- skrypt dzielący oznaczony korpus na podzbiór uczący i testujący \\
+                  & --- skrypt co wyciągania oznaczonych kontekstów \\
+                  & --- przeprowadzenie badań końcowych \\
+\midrule
+Jakub Gramsz      & --- skrypt to wyciągania par hiponim-hiperonim dla zadanej odległości\\
+                  & --- skrypt do sprawdzania odległości wyodrębnionych par \\
+                  & --- badanie wpływu doboru cech  \\
+                  & --- graf relacji hiperonimi (jednak generowanie par \\
+                  & --- na jego podstawie działa za wolno) \\
+\bottomrule
+\end{tabular}
+\end{center}
 
 %Bibliografia
 \bibliographystyle{abbrv}
