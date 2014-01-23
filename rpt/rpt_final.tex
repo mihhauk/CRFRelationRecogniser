@@ -37,26 +37,26 @@ Klasyfikator CRF utworzony został pod kątem segmentacji i znakowania danych se
 
 \subsection{Charakterystyka klasyfikatora}
 
-Klasyfikator CRF został zaporoponowany aby przetwarzać sekwencje w obu kierunkach \cite{lafferty2001crf}.
+Klasyfikator CRF został zaproponowany aby przetwarzać sekwencje w obu kierunkach \cite{lafferty2001crf}.
 
 \section{Rozpoznanie literatury}
 
 \subsection{``Conditional random fields: Probabilistic models for segmenting and labeling sequence data'' \cite{lafferty2001crf}}
 
-Artykuł w którym zaproponowano nowy klasyfikator (ang. Conditional random fields) służący do segmentacji lub etykietowania danych sekwencyjnych mający w tych zadaniach pokonywać wady ukrytych łańcuchów Markowa i gramatyk stochastycznych. Prezentowany klasyfikator przedstawiany jest również jako rozwiazanie ograniczeń modelów Markowa maksymalizujących entropię (MEMM) oraz innych modeli tego typu bazujących na grafach skierowanych. W artykule dokonano porównania efektywności oraz jakości etykietowania danych sekwencyjnych za pomocą CRF oraz HMM i MEMM. Wskazuje on na dużo lepsze wyniki uzyskane przez prezentowaną metodę CRF. 
+Artykuł w którym zaproponowano nowy klasyfikator (ang. Conditional random fields) służący do segmentacji lub etykietowania danych sekwencyjnych mający w tych zadaniach pokonywać wady ukrytych łańcuchów Markowa i gramatyk stochastycznych. Prezentowany klasyfikator przedstawiany jest również jako rozwiązanie ograniczeń modelów Markowa maksymalizujących entropię (MEMM) oraz innych modeli tego typu bazujących na grafach skierowanych. W artykule dokonano porównania efektywności oraz jakości etykietowania danych sekwencyjnych za pomocą CRF oraz HMM i MEMM. Wskazuje on na dużo lepsze wyniki uzyskane przez prezentowaną metodę CRF. 
 
 \subsection{``Conditional random fields: An introduction'' \cite{wallach2004crf}}
 
-Aktykuł opisujący działanie klasyfikatora CRF.
+Artykuł opisujący działanie klasyfikatora CRF.
 
 \subsection{``Document Summarization Using Conditional Random Fields'' \cite{shen2007doccum}}
 
-Aktykuł opisujący wykożystanie CRF do zadania strzeszczania dokumentów.
+Artykuł opisujący wykorzystanie CRF do zadania streszczania dokumentów.
 Opisuje zastosowanie klasyfikatora do problemu z dziedziny Inżynierii Języka Naturalnego, wskazując mi. cechy wykorzystane do opisania danych.  
 
 \subsection{``Integrating probabilistic extraction models and data mining to discover relations and patterns in text'' \cite{culotta2006integrating}}
 
-Przedstawienie zadania odnajdywania relacji w tekście jako problem etykietowania danych sekwencyjnych z wykorzytsaniem CRF.
+Przedstawienie zadania odnajdywania relacji w tekście jako problem etykietowania danych sekwencyjnych z wykorzystaniem CRF.
 
 
 \chapter{Praca badawcza}
@@ -67,12 +67,12 @@ Przedstawienie zadania odnajdywania relacji w tekście jako problem etykietowani
 \begin{enumerate}
  \item Wydobycie par hiponim-hiperonim o zadanej odległości między sobą wprost z bazy Słowosieci. % skryp to wyciągania par hiponim-hiperonim dla zadanej odległości
  \item Budowa grafu relacji hiperonimi. % graf relacji hiperonimi (działa za wolno)
- \item Oznaczenie otrzymanych par w zadanym korupusie. % skrypt oznaczający wyciągnięte pary w zadanym korpusie
+ \item Oznaczenie otrzymanych par w zadanym korpusie. % skrypt oznaczający wyciągnięte pary w zadanym korpusie
  \item Podział korpusu na zbiór uczący oraz testujący. % skrypt dzielacy oznaczony korpus na dane uczace i testujace
- \item Wydobycie oznaczonych kontekstow. % skrypt co wyciagania oznaczonych kontekstow
- \item Wypisywanie przykładów false positive skrypt wypisujacy przyklady false positive.
+ \item Wydobycie oznaczonych kontekstów. % skrypt co wyciagania oznaczonych kontekstow
+ \item Wypisywanie przykładów false positive skrypt wypisujący przykłady false positive.
  \item Dobór cech dla klasyfikatora \textbf{CRF}.  % badanie wpływu doboru cech
- \item Wyznacznanie odległości pomiędzy parami oznaczonymi poprzez klasyfikator (pośrednio oznaczonymi poprzez kontekst).  % skyrp do sprawdzania odległości wyodrębionych par
+ \item Wyznaczenie odległości pomiędzy parami oznaczonymi poprzez klasyfikator (pośrednio oznaczonymi poprzez kontekst).  % skyrp do sprawdzania odległości wyodrębionych par
 \end{enumerate}
 
 \section{Badania}
@@ -191,7 +191,6 @@ Zbiór uczący stanowią zdania pochodzące z korpusów języka polskiego z ozna
 % \end{table}%
 
 
-
 \begin{figure}[h]
 \centering
  \includegraphics[width=13cm]{img/image001.png}
@@ -216,7 +215,7 @@ napotkano jednak problem w postaci bardzo dużego zapotrzebowania na zasoby pami
 
 \item Klasyfikacja cechuje się wysoką precyzją, mimo zróżnicowanych przypadków pozytywnych oraz rzadkiej powtarzalności kontekstów
 
-\item Zaproponowana metoda odnajdowania relacji sematycznych w tekście poprzez oznaczanie ich kontekstów, nie przynosi zadowalających rezultatów, niemniej jednak może stanowić dobry wstęp na podstawie, którego innymi metodami można by proces ten kontynuować. Przykładowo oznaczone konteksty można by grupować na podstawie ich podobieństwa a następnie wyciągać z nich bardziej ogólne wzorce.
+\item Zaproponowana metoda odnajdowania relacji semantycznych w tekście poprzez oznaczanie ich kontekstów, nie przynosi zadowalających rezultatów, niemniej jednak może stanowić dobry wstęp na podstawie, którego innymi metodami można by proces ten kontynuować. Przykładowo oznaczone konteksty można by grupować na podstawie ich podobieństwa a następnie wyciągać z nich bardziej ogólne wzorce.
 
 \end{itemize}
 
