@@ -33,11 +33,11 @@
 
 \subsection{Motywacja}
 
-Klasyfikator CRF utworzony został pod kątem segmentacji i znakowania danych sekwencyjnych \cite{lafferty2001crf}. Klasyfikator ten często wykorzystywany w przetwarzaniu języka naturalnego, jest stosunkowo młodą metodą klasyfikacji, wykazująca potencjał do badań. Klasyfikator ten osiągną wysoką jakością klasyfikacji przy oznaczaniu nazw własnych w tekstach.
+Klasyfikator CRF utworzony został pod kątem segmentacji i znakowania danych sekwencyjnych \cite{lafferty2001crf}. Klasyfikator ten często wykorzystywany w przetwarzaniu języka naturalnego \cite{culotta2006integrating,shen2007doccum} , jest stosunkowo młodą metodą klasyfikacji, wykazująca potencjał do badań. Klasyfikator ten osiągną wysoką jakością klasyfikacji przy oznaczaniu nazw własnych w tekstach.
 
 \subsection{Charakterystyka klasyfikatora}
 
-Klasyfikator CRF został zaproponowany aby przetwarzać sekwencje w obu kierunkach \cite{lafferty2001crf}.
+Klasyfikator CRF został zaproponowany, aby przetwarzać sekwencje w obu kierunkach \cite{lafferty2001crf}, co było niemożliwe stosując ukryte modele Markowa. Klasyfikator CRF poszukuje najbardziej prawdopodobnej sekwencji przyporządkowań etykiet do sekwencji danych, przy czym składowe prawdopodobieństwa dla poszczególnych elementów w sekwencji wyznaczane są zarówno na podstawie bezpośrednio poprzedzającego elementu oraz bezpośrednio następującego, co odróżnia tę metodę od ukrytych modelów Markowa (HMM). W ogólności metoda ta zakłada, że może pracować nie tyko na łańcuchu (sekwencji), ale na dowolnym grafie skierowanym (wtedy mamy więcej elementów bezpośrednio poprzedzających i następujących), jednakże zazwyczaj w literaturze zakłada się pracę na łańcuchu, czyli sekwencji (nawet w pracy prezentującej CRF \cite{lafferty2001crf}).
 
 \section{Rozpoznanie literatury}
 
@@ -47,12 +47,11 @@ Artykuł w którym zaproponowano nowy klasyfikator (ang. Conditional random fiel
 
 \subsection{``Conditional random fields: An introduction'' \cite{wallach2004crf}}
 
-Artykuł opisujący działanie klasyfikatora CRF.
+Artykuł opisujuje sposób działania klasyfikatora CRF. 
 
 \subsection{``Document Summarization Using Conditional Random Fields'' \cite{shen2007doccum}}
 
-Artykuł opisujący wykorzystanie CRF do zadania streszczania dokumentów.
-Opisuje zastosowanie klasyfikatora do problemu z dziedziny Inżynierii Języka Naturalnego, wskazując mi. cechy wykorzystane do opisania danych.  
+Artykuł opisujący wykorzystanie CRF do zadania streszczania dokumentów. Opisuje zastosowanie klasyfikatora do problemu z dziedziny inżynierii języka naturalnego, wskazując mi. cechy wykorzystane do opisania danych.  
 
 \subsection{``Integrating probabilistic extraction models and data mining to discover relations and patterns in text'' \cite{culotta2006integrating}}
 
@@ -202,21 +201,13 @@ Zbiór uczący stanowią zdania pochodzące z korpusów języka polskiego z ozna
 
 
 \begin{itemize}
-\item Badania prowadzone były na stosunkowo małym korpusie, warto przeprowadzić analogiczne testy dla większej ilości danych,
-napotkano jednak problem w postaci bardzo dużego zapotrzebowania na zasoby pamięci.  
-
-\item Skorzystanie z par hiponim-hiperonim o większej odległości powoduje spadek precyzji bez zmian kompletności.
-
-\item Długość kontekstu wpływa na liczbę wygenerowanych przykładów pozytywnych, jednak wraz z jego wzrostem spada jakość klasyfikacji.
-
-\item Manipulacja cechami niezauważalnie wpływa na wyniki (cech powinno być możliwie dużo)
-
-\item Zmniejszenie liczby negatywnych przypadków pogarsza jakość klasyfikacji. Należałoby zrównoważyć proporcje liczby przypadków pozytywnych i negatywnych, jednak trudne jest określenie kryterium.
-
-\item Klasyfikacja cechuje się wysoką precyzją, mimo zróżnicowanych przypadków pozytywnych oraz rzadkiej powtarzalności kontekstów
-
-\item Zaproponowana metoda odnajdowania relacji semantycznych w tekście poprzez oznaczanie ich kontekstów, nie przynosi zadowalających rezultatów, niemniej jednak może stanowić dobry wstęp na podstawie, którego innymi metodami można by proces ten kontynuować. Przykładowo oznaczone konteksty można by grupować na podstawie ich podobieństwa a następnie wyciągać z nich bardziej ogólne wzorce.
-
+  \item Badania prowadzone były na stosunkowo małym korpusie, warto przeprowadzić analogiczne testy dla większej ilości danych, napotkano jednak problem w postaci bardzo dużego zapotrzebowania na zasoby pamięci.
+  \item Skorzystanie z par hiponim-hiperonim o większej odległości powoduje spadek precyzji bez zmian kompletności.
+  \item Długość kontekstu wpływa na liczbę wygenerowanych przykładów pozytywnych, jednak wraz z jego wzrostem spada jakość klasyfikacji.
+  \item Manipulacja cechami niezauważalnie wpływa na wyniki (cech powinno być możliwie dużo).
+  \item Zmniejszenie liczby negatywnych przypadków pogarsza jakość klasyfikacji. Należałoby zrównoważyć proporcje liczby przypadków pozytywnych i negatywnych, jednak trudne jest określenie kryterium.
+  \item Klasyfikacja cechuje się wysoką precyzją, mimo zróżnicowanych przypadków pozytywnych oraz rzadkiej powtarzalności kontekstów.
+  \item Zaproponowana metoda odnajdowania relacji semantycznych w tekście poprzez oznaczanie ich kontekstów, nie przynosi zadowalających rezultatów, niemniej jednak może stanowić dobry wstęp na podstawie, którego innymi metodami można by proces ten kontynuować. Przykładowo oznaczone konteksty można by grupować na podstawie ich podobieństwa a następnie wyciągać z nich bardziej ogólne wzorce.
 \end{itemize}
 
 
